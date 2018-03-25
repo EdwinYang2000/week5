@@ -2,27 +2,30 @@
 
 import sys
 from socket import *
+import _thread
 
 
 #scan.py <host> <start_port>-<end_port>
-host = sys.argv[1]
-portstrs = sys.argv[2].split('-')
 
-start_port = int(portstrs[0])
-end_port = int(portstrs[1])
-
-target_ip = gethostbyname(host)
-
-opened_ports = []
-
-for port in range(start_port, end_port):
+def tcp_test(port):
     sock = socket(AF_INET, SOCK_STREAM)
     sock.settimeout(10)
-    result = sock.connect_ex((target_ip, port))
+    result = sock.connect_ex((target_ip,port))
     if result == 0:
-        opened_ports.append(port)
+        lock.acquire()
+        print "Opened Port:", port
+        lock.release()
 
-print("Opened ports:")
+if __name__ =='__main__':
 
-for i in opened_ports:
-    print(i)
+    host = sys.argv[1]
+    portstrs = sys.argv[2].split('-')
+
+    start_port = int(portstrs[0])
+    end_port = int(portstrs[1])
+
+    target_ip = gethostbyname(host)
+    lock = _thread.allocate_lock()
+
+    for port in range(start_port, end_port):
+        _thread.start_new_thread(tcp_test(port))
