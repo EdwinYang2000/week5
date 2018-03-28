@@ -34,7 +34,8 @@ def main():
                 ip_dict[i[0]] += 1
              else:
                 ip_dict[i[0]] = 1
-    ip_dict = max(ip_dict.items(), key=lambda x: x[1])
+    result_ip = max(ip_dict.items(), key=lambda x: x[1])
+    ip_dict ={result_ip[0]: result_ip[1] }
 
     for i in logs:
         if i[3] == '404':
@@ -42,7 +43,8 @@ def main():
                 url_dict[i[2]] += 1
             else:
                 url_dict[i[2]] = 1
-    url_dict = max(url_dict.items(), key=lambda x: x[1])
+    result_url = max(url_dict.items(), key=lambda x: x[1])
+    url_dict = {result_url[0]: result_url[1]}
 
     return ip_dict,url_dict
 
