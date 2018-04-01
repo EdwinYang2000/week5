@@ -10,31 +10,33 @@ results = []
 
 def parse(response):
     for comment in response.css('div.comment-list-item'):
-        result = {'username': comment.xpath('//div[@class="user-username"]/a/text()').extract(),
-        'content': comment.xpath('//div[@class="comment-item-content"]/p/text()').extract()}
+        print (comment)
+        result = {'username': comment.xpath('.//a[@class="username"]/text()').extract_first().strip(),
+        'content': comment.xpath('.//div[contains(@class,"comment-item-content")]/p/text()').extract_first()}
         results.append(result)
 
-
-print (results)
-
 def has_next_page(response):
-    next_page = response.css('div.pagination-container ul li.disabled').extract_first(default='nextpage')
-    print (next_page)
+    next_page = response.css('div.pagination-container ul li.next-page').extract_first()
+    if 'disabled' not in next_page:
+        print ('next_page')
+        return True
+    else:
+        print (next_page)
+        return False
 
 def goto_next_page(driver):
-    pass
-    element = driver.find_element_by_class('next-page').click()
+    element = driver.find_element_by_class_name('next-page').click()
 
 def wait_page_return(driver, page):
     WebDriverWait(driver, 10).until(
-            EC.text_to_be_present_int_element(
-                (BY.XPATH, '//ul[@class="pagination"]/li[@class="active"]'),
+            EC.text_to_be_present_in_element(
+                (By.XPATH, '//ul[@class="pagination"]/li[@class="active"]'),
                 str(page)
                 )
             )
 
 def spider():
-    driver = webdriver.PHantomJS()
+    driver = webdriver.PhantomJS()
     url = 'http://www.shiyanlou.com/courses/427'
     driver.get(url)
     page = 1
@@ -47,7 +49,7 @@ def spider():
             break
         page += 1
         goto_next_page(driver)
-    with open('/home/shiyanlou/comments.json','w') as f:
+    with open('/Users/yangedwin/workspace/week5/rmon/comments.json','w') as f:
         f.write(json.dumps(results))
 
 if __name__ == '__main__':
