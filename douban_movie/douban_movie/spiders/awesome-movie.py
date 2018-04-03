@@ -17,10 +17,10 @@ class AwesomeMovieSpider(scrapy.spiders.CrawlSpider):
 
     def prase_movie_item(self, response):
         item = MovieItem()
-        item['name'] = response.xpath('//span[@property="v:itemreviewed"]/text()').extract()
+        item['name'] = response.xpath('//span[@property="v:itemreviewed"]/text()').extract_first()
         item['url'] = response.url
-        item['score'] = response.xpath('//strong[@property="v:average"]/text()').extract()
-        item['summary'] = ''.join(response.xpath('//span[@property="v:summary"]/text()').extract())
+        item['score'] = response.xpath('//strong[@property="v:average"]/text()').extract_first()
+        item['summary'] = ''.join(response.xpath('//span[@property="v:summary"]/text()').extract_first())
         return item
 
     def prase_start_url(self,response):
