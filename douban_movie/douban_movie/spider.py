@@ -16,29 +16,25 @@ async def fetch(session, url):
             return await response.text()
 
 def parse(url, body):
-    response = HtmlResponse(url=url, body=body)
-    print (response)
-
+    response = HtmlResponse(url=url, body=body, encoding='utf-8')
     for repository in response.css('li.public'):
-        name = repository.xpath('//a[@itemprop="name codeRepository"]/text()').re_first("\n\s*(.*)")
-        datetime = repository.xpath('//relative-time/@datetime').extract_first()
+        name = repository.xpath('.//a[@itemprop="name codeRepository"]/text()').re_first("\n\s*(.*)")
+        datetime = repository.xpath('.//relative-time/@datetime').extract_first()
         result = (name, datetime)
-        print (result)
-        results.append(result)
+        results.append((name,datetime))
 
 
 async def task(url):
     async with aiohttp.ClientSession() as session:
         html = await fetch(session, url)
-        print(html)
-        parse(url,html.encode('utf-8'))
+        parse(url, html)
 
 def main():
     loop = asyncio.get_event_loop()
-    url_template = 'https://github.com/shiyanlou?page={}&tab=reponsitories'
+    url_template = 'https://github.com/shiyanlou?page={}&tab=repositories'
     tasks = [task(url_template.format(i)) for i in range(1,5)]
     loop.run_until_complete(asyncio.gather(*tasks))
-    with open('/home/shiyanlou/shiyanlou-repos.csv', 'w', newline='') as f:
+    with open('/Users/yangedwin/workspace/week5/rmon/douban_movie/douban_movie/shiyanlou-repos.csv', 'w', newline='') as f:
         write = csv.writer(f)
         write.writerows(results)
 
