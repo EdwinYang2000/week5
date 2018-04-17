@@ -1,0 +1,9 @@
+1:root:x:0:0:root:/root:/bin/bash
+5:sync:x:4:65534:sync:/bin:/bin/sync
+18:nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+25:mongodb:x:106:65534::/home/mongodb:/bin/false
+26:sshd:x:107:65534::/var/run/sshd:/usr/sbin/nologin
+8:lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+10:news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+11:uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+29:mimimimimiM:x:5001:5001::/home/shiyanlou:/usr/bin/zsh
